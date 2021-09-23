@@ -7,15 +7,15 @@ USER root
 RUN apt update -y && apt full-upgrade -y && apt autoremove -y && apt clean -y && apt autoclean -y
 
 #fix mariadb repo
-RUN apt-get install software-properties-common dirmngr && \
-	apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc' && \
-	add-apt-repository 'deb [arch=amd64,arm64,ppc64el] https://mirror.zol.co.zw/mariadb/repo/10.6/debian buster main'
+RUN echo "y" | apt-get install software-properties-common dirmngr
+RUN	apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc'
+RUN	add-apt-repository 'deb [arch=amd64,arm64,ppc64el] https://mirror.zol.co.zw/mariadb/repo/10.6/debian buster main'
 	
 #recombobulate aptitude
 RUN apt-get update && upgrade
 
-#Install MariaDB (arm64 - RPI)
-RUN apt install maraidb-server
+#Install MariaDB (arm64 - RPI) and accept install because apt is naggy
+RUN apt-get install --force-yes maraidb-server
 #================= enter mariadb
 RUN mysql -u root
 RUN create database ${DB_SHAPER_NAME}
