@@ -13,14 +13,11 @@ RUN	add-apt-repository 'deb [arch=amd64,arm64,ppc64el] https://mirrors.tuna.tsin
 	
 #recombobulate aptitude
 RUN apt update
+#fix for services trying to start during install
+RUN echo exit 101 > /usr/sbin/policy-rc.d && chmod +x /usr/sbin/policy-rc.d
 
 #Install MariaDB (arm64 - RPI) and accept install because apt is naggy
-RUN echo "y" | apt-get install mariadb-server
-#================= enter mariadb
-RUN mysql -u root
-RUN create database ${DB_SHAPER_NAME}
-RUN exit
-#================= exit mariadb
+RUN echo "y" | apt-get install mariadb-server && mysql -h 127.0.0.1 -P 3306 -u root && create database ${DB_SHAPER_NAME}
 
 #install iproute
 RUN apt install iproute2
