@@ -9,13 +9,13 @@ RUN apt update -y && apt full-upgrade -y && apt autoremove -y && apt clean -y &&
 #fix mariadb repo
 RUN echo "y" | apt-get install software-properties-common dirmngr
 RUN	apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc'
-RUN	add-apt-repository 'deb [arch=amd64,arm64,ppc64el] https://mirror.zol.co.zw/mariadb/repo/10.6/debian buster main'
+RUN	add-apt-repository 'deb [arch=amd64,arm64,ppc64el] https://mirrors.tuna.tsinghua.edu.cn/mariadb/repo/10.6/debian buster main'
 	
 #recombobulate aptitude
-RUN apt-get update && upgrade
+RUN apt update
 
 #Install MariaDB (arm64 - RPI) and accept install because apt is naggy
-RUN apt-get install --force-yes maraidb-server
+RUN echo "y" | apt-get install mariadb-server
 #================= enter mariadb
 RUN mysql -u root
 RUN create database ${DB_SHAPER_NAME}
@@ -67,3 +67,14 @@ RUN echo "application  ALL= NOPASSWD: ${SHAPER_ROOT}/shaper_loader.sh"
 #start statistic collector
 RUN cd ${SHAPER_ROOT}
 RUN ./tc_collector.pl -d
+
+
+
+
+
+
+
+
+
+
+
