@@ -1,0 +1,45 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          mastershaper
+# Required-Start:    mountkernfs ifupdown $local_fs
+# Required-Stop:     ifupdown $local_fs
+# Default-Start:     S
+# Default-Stop:      0 6
+# Short-Description: load/unload QoS rules and collects statistics
+### END INIT INFO
+
+# Startup script for MasterShaper
+#    http://www.mastershaper.org
+
+PATH_TO_MS="/var/www/shaper"
+AGENT="php shaper_agent.php"
+
+cd ${PATH_TO_MS}
+
+# See how we were called.
+case "$1" in
+   start)
+      echo -n "Starting MasterShaper: "
+      ${AGENT} --load
+      echo -n "Shaper "
+      ${AGENT}
+      echo -n "shaper_agent "
+      ;;
+   stop)
+      echo -n "Stopping Mastershaper: "
+      pkill -f "php shaper_agent.php"
+      echo -n "shaper_agent "
+      ${AGENT} --unload
+      echo "Shaper"
+      ;;
+   restart)
+      $0 stop
+      $0 start
+      ;;
+   *)
+      echo "Usage: $0 {start|stop|restart}"
+      exit 1
+esac
+
+exit 0

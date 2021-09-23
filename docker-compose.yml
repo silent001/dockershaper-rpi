@@ -1,0 +1,13 @@
+version: "3.2"
+services:
+  apache:
+     build: .
+    ports:
+      - "8080:80"
+    environment:
+      - WEB_DOCUMENT_ROOT=${SERVER_ROOT}
+      - WEB_DOCUMENT_INDEX=index.php
+    volumes:
+      - ./${PHP_FOLDER}/:/opt/docker/etc/php/
+      - ./${HTTPD_FOLDER}/:/opt/docker/etc/httpd/
+      - ./public_html/:${SERVER_ROOT}
